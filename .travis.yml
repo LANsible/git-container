@@ -19,7 +19,7 @@ script:
     TAG_STRING="-t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
     if [[ ${TRAVIS_BRANCH} == "master" ]]
     then
-      TAG_STRING+="${TAG_STRING} -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
+      TAG_STRING+=" -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
     fi
     docker build . --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest ${TAG_STRING}
 
