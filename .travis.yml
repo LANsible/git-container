@@ -21,7 +21,7 @@ script:
     then
       TAG_STRING+=" -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
     fi
-    docker build . --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest ${TAG_STRING}
+    docker build . --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest --compress ${TAG_STRING}
 
 deploy:
   provider: script
