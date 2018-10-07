@@ -32,4 +32,4 @@ LABEL maintainer="Wilmar den Ouden <info@wilmardenouden.nl>" \
       org.label-schema.vcs-ref=${TRAVIS_COMMIT} \
       org.label-schema.version=${TRAVIS_BRANCH} \
       org.label-schema.schema-version="1.0" \
-      org.label-schema.docker.cmd="docker run ${DOCKER_NAMESPACE}/${CONTAINER_NAME} git --version" \
+      org.label-schema.docker.cmd="docker run ${DOCKER_NAMESPACE}/${CONTAINER_NAME} --version" \
