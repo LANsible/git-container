@@ -1,0 +1,36 @@
+dist: trusty
+language: minimal
+sudo: false
+
+env:
+  global:
+    - fast_finish: true
+    - DOCKER_NAMESPACE=lansible
+    - CONTAINER_NAME=git
+
+services:
+  - docker
+
+before_script:
+  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest
+
+script:
+  - |
+    TAG_STRING="-t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
+    if [[ ${TRAVIS_BRANCH} == "master" ]]
+    then
+      TAG_STRING+="${TAG_STRING} -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
+    fi
+    docker build . --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest ${TAG_STRING}
+
+deploy:
+  provider: script
+  script: bash deploy/deploy.sh
+  on:
+    branch: master
+  skip_cleanup: true
+
+notifications:
+  email:
+    on_failure: change
+    on_success: never
