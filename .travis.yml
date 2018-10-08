@@ -6,7 +6,7 @@ env:
   global:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
-    - CONTAINER_NAME=git
+    - CONTAINER_NAME=git-clone
 
 services:
   - docker

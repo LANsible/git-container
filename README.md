@@ -1,4 +1,4 @@
-# git-container
+# git-clone-container
 
 [![Travis (.org)](https://img.shields.io/travis/wilmardo/ansible-role-oscam.svg?style=flat-square)](https://travis-ci.org/wilmardo/ansible-role-oscam)
 
@@ -10,8 +10,8 @@ from HTTP or HTTPS, **NO SSH SUPPORT**. This is a personal choice, if needed I c
 
 ### Usage
 ```bash
-docker run -v $pwd:/config lansible/git \
-git clone --depth 1 https://github.com/LANsible/git-container.git /config
+docker run -v $PWD:/config lansible/git-clone \
+clone --depth 1 https://github.com/LANsible/git-container.git /config
 ```
 
 # Examples
@@ -27,9 +27,9 @@ metadata:
   name: example
 spec:
   initContainers:
-    - image: lansible/git:latest
+    - image: lansible/git-clone:latest
       name: init-config
-      command: ['git clone --depth 1 https://github.com/wilmardo/home-assistant.git /config']
+      command: ['--depth 1 https://github.com/wilmardo/home-assistant.git /config']
       volumeMounts:
         - mountPath: /config
           name: config

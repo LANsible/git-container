@@ -27,8 +27,6 @@ RUN /tmp/upx --brute --best \
 FROM alpine:latest
 LABEL maintainer="Wilmar den Ouden <info@wilmardenouden.nl>"
 
-ENV PATH=/usr/libexec/git-core/
-
 # Copy libraries to /lib
 COPY --from=git-alpine \
     "/lib/ld-musl-x86_64.so.1" \
@@ -58,3 +56,5 @@ COPY --from=git-alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-cert
 
 # Copy git templates dir so it doesn't show a warning
 COPY --from=git-alpine /usr/share/git-core/templates /usr/share/git-core/templates
+
+ENTRYPOINT ["/usr/libexec/git-core/git", "clone"]
