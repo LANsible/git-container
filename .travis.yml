@@ -11,29 +11,30 @@ env:
 services:
   - docker
 
-before_script:
-  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest
-
 script:
+  # Try to pull tag but when empty pull branch_name
+  # If successful use as build cache
   - |
-    if [[ ${TRAVIS_TAG} == ${TRAVIS_BRANCH} ]]
+    docker pull "${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_TAG:-${TRAVIS_BRANCH}}"
+    if [[ $? ]]
     then
-      TAG_STRING=" \
-        -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_TAG} \
-        -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
-    elif [[ ! ${TRAVIS_PULL_REQUEST} ]]
-    then
-      TAG_STRING=" \
-        -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
+      CACHE="--cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
     fi
-    docker build . --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest ${TAG_STRING}
+    echo "CACHE is ${CACHE}"
+  - |
+    BUILD_TAGS="-t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
+    if [[ ${TRAVIS_TAG} != "" ]]
+    then
+      BUILD_TAGS+=" -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
+    fi
+    echo "BUILD_TAGS are ${BUILD_TAGS}"
+  - docker build . ${CACHE} ${BUILD_TAGS}
 
 deploy:
   provider: script
   script: bash deploy/deploy.sh
   on:
-    branch: master
-  skip_cleanup: true
+    all_branches: true
 
 notifications:
   email:
