@@ -17,7 +17,7 @@ before_script:
 script:
   - |
     TAG_STRING="-t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
-    if [[ ${TRAVIS_TAG} != "" ]]
+    if [[ ${TRAVIS_TAG} == ${TRAVIS_BRANCH} ]]
     then
       TAG_STRING+=" -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
     fi
