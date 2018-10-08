@@ -16,10 +16,15 @@ before_script:
 
 script:
   - |
-    TAG_STRING="-t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
     if [[ ${TRAVIS_TAG} == ${TRAVIS_BRANCH} ]]
     then
-      TAG_STRING+=" -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
+      TAG_STRING=" \
+        -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_TAG} \
+        -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest"
+    elif [[ ! ${TRAVIS_PULL_REQUEST} ]]
+    then
+      TAG_STRING=" \
+        -t ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${TRAVIS_BRANCH}"
     fi
     docker build . --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest ${TAG_STRING}
 
